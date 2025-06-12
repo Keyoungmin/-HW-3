@@ -22,7 +22,7 @@ Person.prototype.getName = function () {
 
 ### Ex 6-2
 - 생성자 함수, 프로토타입 객체, 그리고 인스턴스 간의 내부 구조를 시각적으로 확인
-- console.dir를 통해 생성자 함수는 prototype 프로퍼티를, 인스턴스는 __proto__ 프로퍼티를 가지며 둘이 연결되어 있음을 보여줌
+- console.dir를 통해 생성자 함수는 prototype 프로퍼티를, 인스턴스는 __proto__ 프로퍼티를 가지며 둘이 연결되어 있음음
 
 ```
 // 예제 6-2 prototype과 __proto__
@@ -42,6 +42,28 @@ console.dir(instance);
 // 실행 결과
 [Function: Constructor]
 Constructor { name: 'Instance' }
+```
+
+### Ex 6-3
+- 인스턴스의 constructor 프로퍼티가 생성자 함수 자신을 가리키고 있음
+- 인스턴스에서 constructor 프로퍼티에 접근하면, 프로토타입 - - 체인을 통해 __proto__.constructor에 접근하게 됨
+- 이를 이용해 원본 생성자 함수를 알지 못해도 새로운 인스턴스를 생성할 수 있음
+
+```
+// 예제 6-3 constructor 프로퍼티
+var arr = [1, 2];
+Array.prototype.constructor === Array // true
+arr.__proto__.constructor === Array   // true
+arr.constructor === Array             // true
+
+var arr2 = new arr.constructor(3, 4);
+console.log(arr2); // [3, 4]
+```
+
+```
+// 실행 결과
+[ 3, 4 ]
+
 ```
 
 
