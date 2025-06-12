@@ -121,3 +121,25 @@ NewConstructor & false
 NewConstructor & false
 NewConstructor & false
 ```
+
+
+### Ex 6-5
+- 인스턴스, 생성자 함수의 프로토타입, 인스턴스의 __proto__ 등 다양한 경로를 통해 원래의 생성자 함수에 접근할 수 있음을 보여줌
+- 어떤 방법을 사용하든 결국 동일한 생성자 함수를 가리키게 되며, 모두 Person의 인스턴스임
+
+```
+// 예제 6-5 다양한 constructor 접근 방법
+var Person = function (name) {
+    this.name = name;
+};
+var p1 = new Person('사람1');
+var p2 = new Person.prototype.constructor('사람2');
+var p3 = p1Proto.constructor('사람3');
+var p4 = new p1.__proto__.constructor('사람4');
+var p5 = new p1.constructor('사람5');
+
+[p1, p2, p3, p4, p5].forEach(function (p) {
+    console.log(p, p instanceof Person);
+});
+
+```
