@@ -67,3 +67,57 @@ console.log(arr2); // [3, 4]
 ```
 
 
+### Ex 6-4
+- 어떤 객체의 constructor 프로퍼티는 얼마든지 다른 값으로 변경될 수 있음을 보임
+- constructor를 변경하더라도 instanceof 연산자의 결과는 바뀌지 않음. 
+- instanceof는 constructor가 아닌 프로토타입 체인을 통해 상속 관계를 확인하기 때문임
+
+```
+// 예제 6-4 constructor 변경
+var NewConstructor = function () {
+    console.log('this is new constructor!');
+};
+var dataTypes = [
+    1,
+    'test', 
+    true, 
+    {}, 
+    [], 
+    function () {}, 
+    /test/,
+    new Number(), 
+    new String(), 
+    new Boolean(), 
+    new Object(), 
+    new Array(),
+    new Function(), 
+    new RegExp(), 
+    new Date(), 
+    new Error()
+];
+
+dataTypes.forEach(function (d) {
+    d.constructor = NewConstructor;
+    console.log(d.constructor.name, '&', d instanceof NewConstructor);
+});
+```
+
+```
+// 실행 결과
+Number & false
+String & false
+Boolean & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+NewConstructor & false
+```
