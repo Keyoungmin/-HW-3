@@ -372,10 +372,6 @@ var g = new Grade(100, 80);
 ### Ex 7-3
 - 생성자 함수의 prototype을 배열([])로 지정하여, 인스턴스가 배열처럼 동작하게 만드는 유사 배열 객체
 - 특히 인스턴스가 가지는 length 프로퍼티와 배열 메서드(push)의 상호작용, 그리고 length 프로퍼티가 삭제됐을 때 발생하는 동작 변화를 보여줌
-- new Grade(100, 80)로 g 인스턴스 { '0': 100, '1': 80, length: 2 }가 생성됨. g의 __proto__는 빈 배열 []을 가리킴
-- g.push(90): g는 __proto__를 통해 배열의 push 메서드를 사용함. push는 g의 length 값(2)을 참조하여 인덱스 2에 90을 추가하고, g.length를 3으로 업데이트함
-- delete g.length: g 인스턴스가 직접 소유하던 length 프로퍼티가 삭제됨
-- g.push(70): push 메서드가 g에서 length를 찾지만 없으므로, 프로토타입 체인을 따라 올라가 g.__proto__인 빈 배열의 length(값: 0)를 사용함. 따라서 인덱스 0에 70을 덮어쓰고, g에 length 프로퍼티를 1로 다시 생성함
 
 ```
 // 예제 7-3 length 프로퍼티를 삭제한 경우
@@ -388,9 +384,50 @@ g.push(70);
 console.log(g); // Grade { '0': 70, '1': 80, '2': 90, length: 1 }
 ```
 
+- new Grade(100, 80)로 g 인스턴스 { '0': 100, '1': 80, length: 2 }가 생성됨. g의 __proto__는 빈 배열 []을 가리킴
+- g.push(90): g는 __proto__를 통해 배열의 push 메서드를 사용함. push는 g의 length 값(2)을 참조하여 인덱스 2에 90을 추가하고, g.length를 3으로 업데이트함
+- delete g.length: g 인스턴스가 직접 소유하던 length 프로퍼티가 삭제됨
+- g.push(70): push 메서드가 g에서 length를 찾지만 없으므로, 프로토타입 체인을 따라 올라가 g.__proto__인 빈 배열의 length(값: 0)를 사용함. 따라서 인덱스 0에 70을 덮어쓰고, g에 length 프로퍼티를 1로 다시 생성함
+
 ```
 // 실행 결과
 Array { '0': 100, '1': 80, '2': 90, length: 3 }
 Array { '0': 70, '1': 80, '2': 90, length: 1 }
 ```
 
+### Ex 7-4
+- 프로토타입 자체에 데이터가 포함된 배열을 할당했을 때 발생하는 문제
+- delete로 인스턴스의 length 프로퍼티를 제거하면, 프로토타입이 가진 length를 기준으로 동작하게 되어 예측과 다른 결과가 나타날 수 있음
+
+```
+// 예제 7-4 요소를 추가하는 배열을 프로토타입 체인에 포함하는 해결 방법
+var Grade = function () {
+    var args = Array.prototype.slice.call(arguments);
+    for (var i = 0; i < args.length; i++) {
+        this[i] = args[i];
+    }
+    this.length = args.length;
+};
+
+
+Grade.prototype = ['a','b','c','d'];
+var g = new Grade(100, 80);
+
+g.push(90);
+console.log(g); 
+
+delete g.length;
+g.push(70);
+console.log(g);
+```
+
+- Grade.prototype이 ['a','b','c','d']이므로 length는 4임
+- g.push(90)까지는 예제 7-3과 동일하게 동작하여 g는 { '0': 100, '1': 80, '2': 90, length: 3 }이 됨
+- delete g.length: g의 length 프로퍼티가 삭제됨
+- g.push(70): push가 g의 length를 찾지 못하고 __proto__의 length인 4를 참조함. 따라서 인덱스 4에 70을 추가하고 g.length를 5로 설정함
+
+```
+// 실행 결과
+Array { '0': 100, '1': 80, '2': 90, length: 3 }
+Array { '0': 100, '1': 80, '2': 90, '4': 70, length: 5 }
+```
