@@ -633,3 +633,63 @@ var extendClass3 = function (SuperClass, SubClass, subMethods) {
     return SubClass;
 };
 ```
+
+### Ex 7-14
+- ES6 이전에 상속 관계에서 부모 클래스의 메서드나 생성자를 호출하는 super 기능을 수동으로 구현
+- SubClass.prototype.super 라는 메서드를 추가함
+- 생성자 호출: this.super(width, width)처럼 인스턴스의 생성자에서 super()를 호출하면, 부모 생성자인 SuperClass.apply(self, arguments)가 실행되어 부모의 프로퍼티를 상속함
+- 메서드 호출: this.super('getArea')()처럼 메서드명을 인자로 주면, 부모 프로토타입(SuperClass.prototype)에서 해당 메서드를 찾아 현재 인스턴스의 this로 실행해주는 함수를 반환함
+- 이를 통해 자식 메서드 안에서 부모 메서드를 호출할 수 있음
+
+```
+// 예제 7-14 하위 클래스에 super 메서드 추가
+var extendClass = function (SuperClass, SubClass, subMethods) {
+    SubClass.prototype = Object.create(SuperClass.prototype);
+    SubClass.prototype.constructor = SubClass;
+    SubClass.prototype.super = function (propName) { // super 기능 구현
+    var self = this;
+    if (!propName) return function () {
+        SuperClass.apply(self, arguments);
+    }
+    var prop = SuperClass.prototype[propName];
+    if (typeof prop !== 'function') return prop;
+    return function () {
+        return prop.apply(self, arguments);
+    }
+    };
+    if (subMethods) {
+    for (var method in subMethods) {
+        SubClass.prototype[method] = subMethods[method];
+    }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+};
+
+var Rectangle = function (width, height) {
+    this.width = width;
+    this.height = height;
+};
+Rectangle.prototype.getArea = function () {
+  return this.width * this.height;
+};
+var Square = extendClass(
+    Rectangle,
+    function (width) {
+        this.super(width, width); // super 사용 (1)
+    }, {
+    getArea: function () {
+      console.log('size is: ', this.super('getArea')()); // super 사용 (2)
+        }
+    }       
+);
+var sq = new Square(10);
+sq.getArea(); // size is:  100
+console.log(sq.super('getArea')()); // 100
+```
+
+```
+// 실행 결과
+size is:  NaN
+NaN
+```
