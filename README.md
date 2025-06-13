@@ -527,3 +527,26 @@ var Square = extendClass1(Rectangle, function (width) {
     Rectangle.call(this,width,width);
 });
 ```
+
+
+### Ex 7-9
+- 중간에 내용이 없는 Bridge 함수를 정의
+- Bridge.prototype에 SuperClass.prototype을 연결하고 new Bridge()를 자식의 프로토타입으로 삼아, 부모의 프로퍼티 상속 없이 프로토타입 체인만 연결
+
+```
+// 예제 7-9 클래스 상속 및 추상화 방법 - 빈 함수를 활용
+var extendClass2 = (function () {
+    var Bridge = function () {};
+    return function (SuperClass, SubClass, subMethods) {
+        Bridge.prototype = SuperClass.prototype;
+        SubClass.prototype = new Bridge();
+        if (subMethods) {
+            for (var method in subMethods) {
+                SubClass.prototype[method] = subMethods[method];
+            }
+        }
+        Object.freeze(SubClass.prototype);
+        return SubClass;
+	};
+})();
+```
