@@ -693,3 +693,67 @@ console.log(sq.super('getArea')()); // 100
 size is:  NaN
 NaN
 ```
+
+
+### Ex 7-15
+- ES5 시절의 생성자 함수와 프로토타입을 이용한 방식과 ES6의 class 키워드를 이용한 방식을 나란히 비교하여, ES6 클래스 문법이 얼마나 더 간결하고 직관적인지 보여줌
+- ES5: 스태틱 메서드는 생성자 함수(ES5)에 직접 프로퍼티로 할당하고, 인스턴스 메서드는 prototype 객체(ES5.prototype)에 할당함
+- ES6: class 선언부 안에 constructor, static 메서드, 일반 메서드를 보기 좋게 정의함. 내부적으로는 ES5 방식과 동일하게 프로토타입 기반으로 동작하지만, 문법적으로 훨씬 깔끔하게 클래스를 표현할 수 있음
+
+```
+// 예제 7-15 ES5와 ES6의 클래스 문법 비교
+var ES5 = function (name) {
+    this.name = name;
+};
+ES5.staticMethod = function () {
+    return this.name + ' staticMethod';
+};
+ES5.prototype.method = function () {
+    return this.name + ' method';
+};
+var es5Instance = new ES5('es5');
+console.log(ES5.staticMethod());     // es5 staticMethod
+console.log(es5Instance.method()); // es5 method
+
+var ES6 = class {
+    constructor (name) {
+    this.name = name;
+    }
+    static staticMethod () {
+    return this.name + ' staticMethod';
+    }
+    method () {
+    return this.name + ' method';
+    }
+};
+var es6Instance = new ES6('es6');
+console.log(ES6.staticMethod());     // ES6 staticMethod
+console.log(es6Instance.method()); // es6 method
+
+// ES6의 클래스 상속
+var Rectangle = class {
+    constructor (width, height) {
+    this.width = width;
+    this.height = height;
+    }
+    getArea () {
+    return this.width * this.height;
+    }
+};
+var Square = class extends Rectangle {
+    constructor (width) {
+    super(width, width);
+    }
+    getArea () {
+    console.log('size is: ', super.getArea());
+    }
+};
+```
+
+```
+// 실행 결과
+ES5 staticMethod
+es5 method
+ES6 staticMethod
+es6 method
+```
