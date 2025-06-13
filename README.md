@@ -500,5 +500,30 @@ var Square = function (width) {
 };
 Square.prototype = new Rectangle();
 ...
+```
 
+### Ex 7-8
+- 프로퍼티 제거: new SuperClass()로 프로토타입을 연결한 뒤, for문으로 불필요한 프로퍼티를 일일이 delete하는 비효율적인 방식임
 
+```
+// 예제 7-8 클래스 상속 및 추상화 방법 - 인스턴스 생성 후 프로퍼티 제거
+var extendClass1 = function (SuperClass, SubClass, subMethods) {
+    SubClass.prototype = new SuperClass();
+    for (var prop in SubClass.prototype) {
+        if (SubClass.prototype.hasOwnProperty(prop)) {
+            delete SubClass.prototype[prop];
+        }
+    }
+    if (subMethods) {
+        for (var method in subMethods) {
+            SubClass.prototype[method] = subMethods[method];
+        }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+};
+
+var Square = extendClass1(Rectangle, function (width) {
+    Rectangle.call(this,width,width);
+});
+```
