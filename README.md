@@ -506,7 +506,7 @@ Square.prototype = new Rectangle();
 - 프로퍼티 제거: new SuperClass()로 프로토타입을 연결한 뒤, for문으로 불필요한 프로퍼티를 일일이 delete하는 비효율적인 방식임
 
 ```
-// 예제 7-8 클래스 상속 및 추상화 방법 - 인스턴스 생성 후 프로퍼티 제거
+// 예제 7-8 클래스 상속 및 추상화 방법(1) - 인스턴스 생성 후 프로퍼티 제거
 var extendClass1 = function (SuperClass, SubClass, subMethods) {
     SubClass.prototype = new SuperClass();
     for (var prop in SubClass.prototype) {
@@ -534,7 +534,7 @@ var Square = extendClass1(Rectangle, function (width) {
 - Bridge.prototype에 SuperClass.prototype을 연결하고 new Bridge()를 자식의 프로토타입으로 삼아, 부모의 프로퍼티 상속 없이 프로토타입 체인만 연결
 
 ```
-// 예제 7-9 클래스 상속 및 추상화 방법 - 빈 함수를 활용
+// 예제 7-9 클래스 상속 및 추상화 방법(2) - 빈 함수를 활용
 var extendClass2 = (function () {
     var Bridge = function () {};
     return function (SuperClass, SubClass, subMethods) {
@@ -549,4 +549,16 @@ var extendClass2 = (function () {
         return SubClass;
 	};
 })();
+```
+
+### Ex 7-10
+- Object.create 활용: ES5에 도입된 Object.create()를 사용하여 지정된 프로토타입을 갖는 새로운 객체를 만듦
+- Object.create(Rectangle.prototype)는 Rectangle.prototype을 __proto__로 하는 빈 객체를 생성해주므로, 가장 간결하고 효율적으로 프로토타입 체인을 연결
+
+```
+// 예제 7-10 클래스 상속 및 추상화 방법(3) - Object.create 활용
+...
+Square.prototype = Object.create(Rectangle.prototype);
+Object.freeze(Square.prototype);
+...
 ```

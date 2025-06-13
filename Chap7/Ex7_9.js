@@ -1,3 +1,5 @@
+
+
 // 예제 7-9 클래스 상속 및 추상화 방법(2) - 빈 함수를 활용
 var extendClass2 = (function () {
     var Bridge = function () {};
