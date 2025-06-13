@@ -562,3 +562,30 @@ Square.prototype = Object.create(Rectangle.prototype);
 Object.freeze(Square.prototype);
 ...
 ```
+
+
+### Ex 7-11
+- 부모 클래스의 인스턴스를 생성하여 프로토타입으로 삼은 뒤, 불필요한 부모의 인스턴스 프로퍼티를 for, delete로 제거하는 방식의 완성본
+- 프로토타입 체인을 연결할 수는 있지만, 인스턴스를 만들었다가 삭제하는 과정 때문에 비효율적인 방법임임
+
+```
+// 예제 7-11 클래스 상속 및 추상화 방법 - 완성본(1) - 인스턴스 생성 후 프로퍼티 제거
+var extendClass1 = function (SuperClass, SubClass, subMethods) {
+    SubClass.prototype = new SuperClass();
+    for (var prop in SubClass.prototype) {
+        if (SubClass.prototype.hasOwnProperty(prop)) {
+            delete SubClass.prototype[prop];
+        }
+    }
+    
+    SubClass.prototype.constructor = SubClass;
+    if (subMethods) {
+        for (var method in subMethods) {
+            SubClass.prototype[method] = subMethods[method];
+        }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+};
+```
+
