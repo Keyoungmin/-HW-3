@@ -369,4 +369,28 @@ Grade.prototype = [];
 var g = new Grade(100, 80);
 ```
 
+### Ex 7-3
+- 생성자 함수의 prototype을 배열([])로 지정하여, 인스턴스가 배열처럼 동작하게 만드는 유사 배열 객체
+- 특히 인스턴스가 가지는 length 프로퍼티와 배열 메서드(push)의 상호작용, 그리고 length 프로퍼티가 삭제됐을 때 발생하는 동작 변화를 보여줌
+- new Grade(100, 80)로 g 인스턴스 { '0': 100, '1': 80, length: 2 }가 생성됨. g의 __proto__는 빈 배열 []을 가리킴
+- g.push(90): g는 __proto__를 통해 배열의 push 메서드를 사용함. push는 g의 length 값(2)을 참조하여 인덱스 2에 90을 추가하고, g.length를 3으로 업데이트함
+- delete g.length: g 인스턴스가 직접 소유하던 length 프로퍼티가 삭제됨
+- g.push(70): push 메서드가 g에서 length를 찾지만 없으므로, 프로토타입 체인을 따라 올라가 g.__proto__인 빈 배열의 length(값: 0)를 사용함. 따라서 인덱스 0에 70을 덮어쓰고, g에 length 프로퍼티를 1로 다시 생성함
+
+```
+// 예제 7-3 length 프로퍼티를 삭제한 경우
+... (Ex 7-2)
+g.push(90);
+console.log(g); // Grade { '0': 100, '1': 80, '2': 90, length: 3 }
+
+delete g.length;
+g.push(70);
+console.log(g); // Grade { '0': 70, '1': 80, '2': 90, length: 1 }
+```
+
+```
+// 실행 결과
+Array { '0': 100, '1': 80, '2': 90, length: 3 }
+Array { '0': 70, '1': 80, '2': 90, length: 1 }
+```
 
