@@ -271,13 +271,33 @@ data.forEach(function (datum) {
 ```
 
 ### Ex 6-10
-- 
+- Grade는 배열처럼 보일 뿐, Array.prototype을 상속하지 않아 pop 메서드가 없음
+- prototype이 연결되지 않으면 pop 같은 배열 메서드를 쓸 수 없음
+- prototype에 배열 인스턴스([])를 할당하는 건 잘못된 방법임
+
+```
+// 예제 6-10 Grade 생성자 함수와 인스턴스
+var Grade = function () {
+    var args = Array.prototype.slice.call(arguments);
+    for (var i = 0; i < args.length; i++) {
+        this[i] = args[i];
+    }
+    this.length = args.length;
+};
+var g = new Grade(100, 80);
+
+console.log(g);
 
 ```
 
-```
+-  첫 console.log(g)는 Grade { '0': 100, '1': 80, length: 2 } 를 출력하지만, 다음 줄 g.pop()에서 에러가 발생하고 프로그램이 멈춤
 
 ```
 // 실행 결과
+Grade { '0': 100, '1': 80, length: 2 }
 
+g.pop();
+  ^
+
+TypeError: g.pop is not a function
 ```
