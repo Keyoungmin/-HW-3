@@ -222,3 +222,62 @@ arr.toString(); // 1_2
 1,2
 1_2
 ```
+
+
+### Ex 6-9
+- Object.prototype.getEntries가 정의되면, 배열, 숫자, 문자열 등 모든 데이터 타입이 이 메서드를 상속받음
+- data.forEach 루프 안에서 datum[1].getEntries()가 호출되면, 각 데이터는 자신의 프로토타입 체인 최상단에 있는 getEntries를 찾아 실행함
+- 모든 객체가 상속받는 Object.prototype에 getEntries를 추가했으므로, 배열, 숫자, 문자열 등 모든 데이터가 이 메서드를 호출할 수 있음
+
+```
+// 예제 6-9 Object.prototype에 추가한 메서드에의 접근
+Object.prototype.getEntries = function() {
+    var res = [];
+    for (var prop in this) {
+        if (this.hasOwnProperty(prop)) {
+            res.push([prop, this[prop]]);
+        }
+    }
+    return res;
+};
+var data = [
+    ['object', { a: 1, b: 2, c: 3 }],
+    ['number', 345],
+    ['string', 'abc'],
+    ['boolean', false],
+    ['func', function() {}],
+    ['array', [1, 2, 3]]
+];
+
+data.forEach(function (datum) {
+    console.log(datum[1].getEntries());
+});
+
+```
+
+- data 배열의 각 요소에 대해 getEntries가 실행된 결과가 출력됨
+    - 객체는 [ [ 'a', 1 ], [ 'b', 2 ], [ 'c', 3 ] ]
+    - 배열은 [ [ '0', 'a' ], [ '1', 'b' ], [ '2', 'c' ] ]
+    - 문자열은 [ [ '0', 1 ], [ '1', 2 ], [ '2', 3 ] ] 와 같이 출력됨
+
+```
+// 실행 결과
+[ [ 'a', 1 ], [ 'b', 2 ], [ 'c', 3 ] ]
+[]
+[ [ '0', 'a' ], [ '1', 'b' ], [ '2', 'c' ] ]
+[]
+[]
+[ [ '0', 1 ], [ '1', 2 ], [ '2', 3 ] ]
+```
+
+### Ex 6-10
+- 
+
+```
+
+```
+
+```
+// 실행 결과
+
+```
