@@ -143,3 +143,19 @@ var p5 = new p1.constructor('사람5');
 });
 
 ```
+
+```
+// 실행 결과
+Person { name: '사람1' } true
+Person { name: '사람2' } true
+Person { name: '사람3' } true
+Person { name: '사람4' } true
+Person { name: '사람5' } true
+```
+
+
+
+
+
+
+
