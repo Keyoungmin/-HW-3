@@ -488,3 +488,17 @@ Square.prototype.getArea = function () {
 ```
 
 
+### Ex 7-7
+- 자바스크립트에서 프로토타입 체인을 이용한 가장 기본적인 클래스 상속 방법
+- call 메서드로 부모의 프로퍼티를, new 키워드로 부모의 인스턴스를 만들어 프로토타입 메서드를 상속받는 구조
+
+```
+// Rectangle을 상속하는 Square 클래스
+...
+var Square = function (width) {
+	Rectangle.call(this, width, width);
+};
+Square.prototype = new Rectangle();
+...
+
+
