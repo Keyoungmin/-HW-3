@@ -431,3 +431,41 @@ console.log(g);
 Array { '0': 100, '1': 80, '2': 90, length: 3 }
 Array { '0': 100, '1': 80, '2': 90, '4': 70, length: 5 }
 ```
+
+
+### Ex 7-5
+- Rectangle과 Square라는 두 개의 독립된 클래스를 정의
+- 두 클래스 모두 넓이를 구하는 getArea 메서드를 가지고 있지만, 각자 구현되어 있어 코드 중복이 발생하고 있음을 보여줌
+- 이는 클래스 상속의 필요성 강조
+
+구동 방식
+Rectangle과 Square는 완전히 별개의 생성자 함수와 프로토타입을 가짐. 따라서 rect와 sq 인스턴스는 각각 자신의 프로토타입에 있는 getArea 메서드를 호출하여 넓이를 정상적으로 계산함
+
+```
+// 예제 7-5 Rectangle, Square 클래스
+var Rectangle = function (width, height) {
+    this.width = width;
+    this.height = height;
+};
+Rectangle.prototype.getArea = function () {
+    return this.width * this.height;
+};
+var rect = new Rectangle(3, 4);
+console.log(rect.getArea()); // 12
+
+var Square = function (width) {
+    this.width = width;
+};
+Square.prototype.getArea = function () {
+    return this.width * this.width;
+};
+var sq = new Square(5);
+console.log(sq.getArea()); // 25
+```
+
+```
+// 실행 결과
+12
+25
+```
+
