@@ -22,7 +22,7 @@ Person.prototype.getName = function () {
 
 ### Ex 6-2
 - 생성자 함수, 프로토타입 객체, 그리고 인스턴스 간의 내부 구조를 시각적으로 확인
-- console.dir를 통해 생성자 함수는 prototype 프로퍼티를, 인스턴스는 __proto__ 프로퍼티를 가지며 둘이 연결되어 있음음
+- console.dir를 통해 생성자 함수는 prototype 프로퍼티를, 인스턴스는 __proto__ 프로퍼티를 가지며 둘이 연결되어 있음
 
 ```
 // 예제 6-2 prototype과 __proto__
@@ -126,6 +126,8 @@ NewConstructor & false
 ### Ex 6-5
 - 인스턴스, 생성자 함수의 프로토타입, 인스턴스의 __proto__ 등 다양한 경로를 통해 원래의 생성자 함수에 접근할 수 있음을 보여줌
 - 어떤 방법을 사용하든 결국 동일한 생성자 함수를 가리키게 되며, 모두 Person의 인스턴스임
+- p1부터 p5까지, 표현은 다르지만 모두 결국 Person 생성자 함수를 찾아내 new 연산을 수행함
+- 결과적으로 5개의 Person 인스턴스가 만들어지고, forEach 루프는 이들이 모두 Person의 인스턴스가 맞다고(true) 출력함
 
 ```
 // 예제 6-5 다양한 constructor 접근 방법
@@ -153,7 +155,34 @@ Person { name: '사람4' } true
 Person { name: '사람5' } true
 ```
 
+### Ex 6-6
+- iu.getName = function... 코드가 실행되는 순간, iu 인스턴스 객체에 getName이라는 새로운 프로퍼티가 직접 생성됨
+- 이후 iu.getName()을 호출하면, 자바스크립트 엔진은 프로토타입을 보기 전에 iu 객체 자신부터 뒤짐
+- iu 인스턴스에 getName을 직접 할당했으므로, 호출 시 프로토타입까지 가지 않고 인스턴스의 메서드를 바로 실행함
 
+
+
+```
+// 예제 6-6 메서드 오버라이드
+var Person = function (name) {
+    this.name = name;
+};
+Person.prototype.getName = function () {
+    return this.name;
+};
+
+var iu = new Person('지금');
+iu.getName = function () {
+    return '바로 ' + this.name;
+};
+console.log(iu.getName());
+```
+
+console.log(iu.getName())는 프로토타입의 것이 아닌, 인스턴스에 새로 정의된 함수를 실행하여 '바로 지금'을 출력함
+```
+// 실행 결과
+바로 지금
+```
 
 
 
