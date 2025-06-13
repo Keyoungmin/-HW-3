@@ -301,3 +301,52 @@ g.pop();
 
 TypeError: g.pop is not a function
 ```
+
+
+---
+## Chapter 7
+---
+
+### Ex 7-1
+
+
+### Ex 7-1
+- 생성자 함수에 직접 할당한 스태틱 메서드와 생성자의 prototype 객체에 할당한 프로토타입 메서드의 차이점을 보여줌줌
+- 인스턴스는 프로토타입 체인을 통해 프로토타입 메서드에는 접근할 수 있지만, 생성자 함수 자체의 프로퍼티인 스태틱 메서드에는 직접 접근할 수 없음
+
+
+```
+// 예제 7-1 스태틱 메서드, 프로토타입 메서드
+var Rectangle = function (width, height) {
+    this.width = width;
+    this.height = height;
+};
+
+Rectangle.prototype.getArea = function () {
+    return this.width * this.height;
+};
+
+Rectangle.isRectangle = function (instance) {
+    return instance instanceof Rectangle && 
+        instance.width > 0 && instance.height > 0;
+};
+
+var rect1 = new Rectangle(3, 4);
+console.log(rect1.getArea()); // 12 (O)
+console.log(Rectangle.isRectangle(rect1)); // true
+console.log(rect1.isRectangle(rect1)); // Error (X)
+```
+
+- rect1.getArea(): rect1 인스턴스는 자신의 __proto__가 가리키는 Rectangle.prototype에 정의된 getArea 메서드를 호출할 수 있으므로 정상 실행됨
+- Rectangle.isRectangle(rect1): 스태틱 메서드는 생성자 함수를 통해 직접 호출해야 하므로 정상 실행됨
+-  rect1.isRectangle(): isRectangle은 Rectangle 생성자 함수에 직접 할당된 스태틱 메서드임. rect1 인스턴스나 그 프로토타입 체인에는 존재하지 않으므로 에러가 발생함
+
+```
+// 실행 결과
+12
+true
+
+console.log(rect1.isRectangle(rect1)); // Error (X)
+                  ^
+TypeError: rect1.isRectangle is not a function
+```
