@@ -615,3 +615,21 @@ var extendClass2 = (function () {
 })();
 ```
 
+### Ex 7-13
+- ES5의 Object.create()를 사용하여 프로토타입 체인을 연결하는 가장 효율적인 방법의 완성본임
+- 코드가 간결하고 의도가 명확하게 드러나는 것이 장점임
+
+```
+// 예제 7-13 클래스 상속 및 추상화 방법 - 완성본(3) - Object.create 활용
+var extendClass3 = function (SuperClass, SubClass, subMethods) {
+    SubClass.prototype = Object.create(SuperClass.prototype);
+    SubClass.prototype.constructor = SubClass;
+    if (subMethods) {
+        for (var method in subMethods) {
+            SubClass.prototype[method] = subMethods[method];
+        }
+    }
+    Object.freeze(SubClass.prototype);
+    return SubClass;
+};
+```
