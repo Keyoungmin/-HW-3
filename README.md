@@ -469,3 +469,22 @@ console.log(sq.getArea()); // 25
 25
 ```
 
+### Ex 7-6
+- Square 클래스를 Rectangle 클래스와 더 유사한 구조를 갖도록 변경
+- 이는 Square가 Rectangle의 기능을 상속받을 수 있도록 구조적 기반 마련
+
+```
+// 예제 7-6 Square 클래스 변경
+...(Ex 7-5)
+var Square = function (width) {
+	this.width = width;
+		this.height = width;
+};
+
+Square.prototype.getArea = function () {
+	return this.width * this.height
+};
+...
+```
+
+
