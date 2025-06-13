@@ -178,7 +178,8 @@ iu.getName = function () {
 console.log(iu.getName());
 ```
 
-console.log(iu.getName())는 프로토타입의 것이 아닌, 인스턴스에 새로 정의된 함수를 실행하여 '바로 지금'을 출력함
+- console.log(iu.getName())는 프로토타입의 것이 아닌, 인스턴스에 새로 정의된 함수를 실행하여 '바로 지금'을 출력함
+
 ```
 // 실행 결과
 바로 지금
@@ -195,3 +196,29 @@ arr(.__proto__).push(3);
 arr(.__proto__)(__proto__).hasOwnProperty(2);
 ```
 
+### Ex 6-8
+- 첫 arr.toString()은 Array.prototype의 것을 찾아 실행함
+- arr.toString = function... 으로 arr 객체에 직접 메서드를 달아줌
+- 두 번째 arr.toString()은 arr 객체에서 바로 메서드를 찾아 실행함
+- 실행 : 처음에는 Array.prototype.toString()을, 나중에는 arr 객체에 직접 할당한 toString()을 실행함
+
+```
+// 예제 6-8 메서드 오버라이드와 프로토타입 체이닝
+var arr = [1, 2];
+Array.prototype.toString.call(arr);
+Object.prototype.toString.call(arr);
+arr.toString(); // 1,2
+
+arr.toString = function () {
+    return this.join('_');
+};
+arr.toString(); // 1_2
+```
+
+- 첫 번째 arr.toString()은 '1,2'를 반환하고, 재정의 후 두 번째 arr.toString()은 '1_2'를 반환함
+
+```
+// 실행 결과 (console 추가)
+1,2
+1_2
+```
