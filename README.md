@@ -184,7 +184,14 @@ console.log(iu.getName())는 프로토타입의 것이 아닌, 인스턴스에 �
 바로 지금
 ```
 
+### Ex 6-7
+- 코드 오류 발생
+- arr.hasOwnProperty(2)를 실행하면, arr에서 찾음 -> 없음 -> arr.__proto__에서 찾음 -> 없음 -> arr.__proto__.__proto__(Object.prototype)에서 찾아서 실행함, 이게 프로토타입 체인 탐색 과정임
 
-
-
+```
+// 예제 6-7 배열에서 배열 메서드 및 객체 메서드 실행
+var arr = [1, 2];
+arr(.__proto__).push(3);
+arr(.__proto__)(__proto__).hasOwnProperty(2);
+```
 
