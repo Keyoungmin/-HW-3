@@ -589,3 +589,29 @@ var extendClass1 = function (SuperClass, SubClass, subMethods) {
 };
 ```
 
+### Ex 7-12
+- Bridge를 두어 부모의 불필요한 프로퍼티 상속 없이 프로토타입 체인만 순수하게 연결하는 방식
+- Bridge.prototype = SuperClass.prototype: 빈 함수의 프로토타입에 부모 클래스의 프로토타입을 연결함
+- SubClass.prototype = new Bridge(): 이 Bridge 함수의 인스턴스를 자식의 프로토타입으로 삼음
+- 결과적으로 자식 프로토타입은 부모 프로토타입을 __proto__로 가리키는, 아무런 프로퍼티도 없는 깨끗한 객체가 됨
+- SubClass.prototype.constructor = SubClass: constructor 연결을 복구함
+
+```
+// 예제 7-12 클래스 상속 및 추상화 방법 - 완성본(2) - 빈 함수를 활용
+var extendClass2 = (function () {
+    var Bridge = function () {};
+    return function (SuperClass, SubClass, subMethods) {
+        Bridge.prototype = SuperClass.prototype;
+        SubClass.prototype = new Bridge();
+        SubClass.prototype.constructor = SubClass;
+        if (subMethods) {
+            for (var method in subMethods) {
+                SubClass.prototype[method] = subMethods[method];
+            }
+        }
+        Object.freeze(SubClass.prototype);
+        return SubClass;
+    };
+})();
+```
+
